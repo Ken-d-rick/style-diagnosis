@@ -1,1 +1,579 @@
-placeholder
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ken'drick Style Diagnosis</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #fafafa;
+    --text: #111;
+    --sub: #666;
+    --line: #e5e5e5;
+    --accent: #000;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 32px;
+  }
+  .brand {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--sub);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .tagline {
+    font-size: 14px;
+    color: var(--sub);
+  }
+  /* Start screen */
+  .start-screen {
+    text-align: center;
+    padding: 24px 0;
+  }
+  .start-screen p {
+    font-size: 15px;
+    color: var(--sub);
+    margin-bottom: 32px;
+    line-height: 2;
+  }
+  .start-screen .lead {
+    font-size: 17px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent);
+    padding: 14px 40px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+  .btn:hover { background: #fff; color: var(--accent); }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+  }
+  .btn-outline:hover { background: var(--accent); color: #fff; }
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+  .progress-label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--sub);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar {
+    height: 2px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  /* Questions */
+  .question {
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .question h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 28px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+  .q-num {
+    font-size: 12px;
+    color: var(--sub);
+    letter-spacing: 0.25em;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .option {
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 18px 24px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .option:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+  .nav-actions {
+    margin-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .back-btn {
+    background: transparent;
+    border: none;
+    color: var(--sub);
+    font-size: 13px;
+    cursor: pointer;
+    letter-spacing: 0.15em;
+    font-family: inherit;
+    padding: 8px 0;
+  }
+  .back-btn:hover { color: var(--accent); }
+  .back-btn:disabled { opacity: 0; pointer-events: none; }
+  /* Result */
+  .result {
+    animation: fadeIn 0.6s ease;
+  }
+  .result-intro {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .result-intro .label {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--sub);
+    margin-bottom: 12px;
+  }
+  .result-intro h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+  }
+  .result-intro .type-name {
+    display: inline-block;
+    border: 1px solid var(--accent);
+    padding: 8px 20px;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    margin: 16px 0;
+  }
+  .result-intro p {
+    color: var(--sub);
+    font-size: 14px;
+    margin: 16px auto 0;
+    max-width: 520px;
+    line-height: 2;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+  @media (min-width: 600px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .product-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    overflow: hidden;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  .product-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: #f0f0f0;
+    display: block;
+  }
+  .product-info {
+    padding: 16px;
+  }
+  .product-rank {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--sub);
+    margin-bottom: 4px;
+  }
+  .product-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+  }
+  .product-price {
+    font-size: 13px;
+    color: var(--sub);
+  }
+  .result-actions {
+    margin-top: 48px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  .shop-link {
+    font-size: 13px;
+    color: var(--sub);
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    border-bottom: 1px solid var(--sub);
+    padding-bottom: 2px;
+  }
+  .shop-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  footer {
+    text-align: center;
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--sub);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">KEN'DRICK</div>
+    <h1>Style Diagnosis</h1>
+    <div class="tagline">7つの質問であなたに似合う一枚を</div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer>
+    DESIGNED BY KEN'DRICK &nbsp;/&nbsp; <a href="https://kendrick.base.shop/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">kendrick.base.shop</a>
+  </footer>
+</div>
+
+<script>
+// ============ Product Data ============
+const products = [
+  {id:"137008634", name:"鍵", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/ee242b3801af373cc5ced387f294bac6.jpg", tags:["simple","art","mystery"]},
+  {id:"135668991", name:"ロゴ", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/4d3e914afdf59cad996bbf4a32a73b67.jpg", tags:["simple","art"]},
+  {id:"133071560", name:"三角形と目", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/51bdf5e3d748cf36c787fcb4183e7b63.jpg", tags:["mystery","art","simple"]},
+  {id:"133121076", name:"バケットハット", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/474904bc9c30d648485781493cabb620.jpg", tags:["simple","urban"]},
+  {id:"133964294", name:"メロンとワイン", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/5df5d06a7243e5019f20ee3ce4325d9f.jpg", tags:["food","pop"]},
+  {id:"137038874", name:"波と雲", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/051e64fe39620a1c7e184dc50bfb3fee.jpg", tags:["nature","art"]},
+  {id:"133615921", name:"★を手に入れる", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/c0342e3acdbf468b0d7f9c728086b46c.jpg", tags:["art","pop","simple"]},
+  {id:"133074115", name:"Yog-Sothoth", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/5635cd83e94bb4cc75c1a45aa2220903.jpg", tags:["mystery","dark","monster"]},
+  {id:"135348731", name:"檸檬の日々", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/860213b3562d10b0e54d913325215247.jpg", tags:["food","simple","nature"]},
+  {id:"135662153", name:"魚", price:"3,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/4e0662461460fc88615956b4b05924a9.jpg", tags:["nature","simple"]},
+  {id:"134100680", name:"Shoggoth", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/1d00d1b5357371676389611fd564e4fa.jpg", tags:["mystery","dark","monster"]},
+  {id:"134061430", name:"I'm I", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/233aac3e33904fc9def87a65ec00f0ea.jpg", tags:["simple","art"]},
+  {id:"133074146", name:"点と線", price:"8,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/2b3a8941b95e4b0ffa8a9f31614f9440.jpg", tags:["simple","art","tech"]},
+  {id:"133073633", name:"♥を実行する", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/5c97f77569e26afc61fced5aa5fb2bcd.jpg", tags:["heart","tech","pop"]},
+  {id:"139104066", name:"レモン胃", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/b6fd11494c2e3344cd304d0e94d0267b.jpg", tags:["food","pop","art"]},
+  {id:"134061561", name:"怪獣", price:"3,500", img:"https://baseec-img-mng.akamaized.net/images/item/origin/1a0ebf5845172ae2682e69cd0c5f3038.jpg", tags:["monster","pop"]},
+  {id:"134856623", name:"Elder Thing", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/82b2a5c00f6bcc145a860b4bee16bef0.jpg", tags:["mystery","dark","monster"]},
+  {id:"135663504", name:"TOKYO Spectral Analyzer", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/5226ee7f29c08ff996df35c8b7f4773e.jpg", tags:["tech","urban","music"]},
+  {id:"136312905", name:"スペアナ ネオンカラー", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/087ff2de73321032a16b7a70ad8baf13.jpg", tags:["tech","urban","music","pop"]},
+  {id:"137073980", name:"東京の街", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/4f1bb7dcd9a8c5fe5673a0449d79d37d.jpg", tags:["urban","art"]},
+  {id:"135700808", name:"涙と波", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/aa08b0132b1f4cb13b506d1e2b839559.jpg", tags:["nature","art"]},
+  {id:"135982076", name:"I'll be", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/68b31592a9d78c95bd34358a6e1322e2.jpg", tags:["simple","art"]},
+  {id:"136406804", name:"ラーメンモンスター", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/8e0ad399698a8358c88103320a3564ba.jpg", tags:["food","monster","pop"]},
+  {id:"136392663", name:"歪み", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/2c9e4e77ea272908d5dc6f4b606d2082.jpg", tags:["tech","simple","art"]},
+  {id:"136435028", name:"白いオイスター", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/2919fd4487d708488aa339fcd2160f6c.jpg", tags:["food","simple"]},
+  {id:"136387992", name:"●", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/5db21b74b9fe58bf4ea46277c7739af0.jpg", tags:["simple","art","mystery"]},
+  {id:"136760353", name:"ストロベリー", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/4b564447332808482d3fc869d121642a.jpg", tags:["food","pop"]},
+  {id:"139111102", name:"shoggoth colors", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/85ec1ca60f72f6c6aeed6a1f5a415ec6.jpg", tags:["mystery","monster","pop"]},
+  {id:"139110888", name:"ヒョウモンダコ", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/51eb17a643657cce0dd46d2b15db5ae0.jpg", tags:["nature","dark","food"]},
+  {id:"137069628", name:"フローズンマルガリータ", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/2cd67b81893c6187c571c97aca1a75d8.jpg", tags:["food","pop"]},
+  {id:"139975897", name:"ピザ肝臓", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/18b756cd24b9a6705cab846e28b927a9.jpg", tags:["food","pop","monster"]},
+  {id:"137074461", name:"Dagon", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/5ab81c97c72fe537c0354a4462cc2a01.jpg", tags:["mystery","dark","monster"]},
+  {id:"137069362", name:"Dagonトートバッグ", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/4e17a5e2bf55527116372e2acf24f1d7.jpg", tags:["mystery","dark","monster"]},
+  {id:"137885295", name:"太陽", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/f1967fac3c09ed435b089e22b8e4ec52.jpg", tags:["space","simple","art"]},
+  {id:"137038959", name:"渦", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/4b9b1d8330c7bc91b8ec52914b5db979.jpg", tags:["art","space","simple"]},
+  {id:"134857045", name:"崩壊惑星", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/3eb013e16b72ae7f8d068363a21a7b81.jpg", tags:["space","dark","mystery"]},
+  {id:"138601531", name:"♥を返す", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/848fa40ba6cb76024f2e91b07efb38ab.jpg", tags:["heart","pop"]},
+  {id:"140658998", name:"トマト心臓", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/b1f24a1278c51f63b74e7c74057a0737.jpg", tags:["food","heart","pop"]},
+  {id:"138538741", name:"餃子脳", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/0b8c351ad74cbce51c834bdb6fd74fdb.jpg", tags:["food","pop","tech"]},
+  {id:"134852823", name:"Error404", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/a3c5867892bf0cad8546a9dcc744fcde.jpg", tags:["tech","simple","art"]},
+  {id:"134824698", name:"心臓を撃ち抜いて", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/030c0251d6be802dd312d13b397c9736.jpg", tags:["heart","dark"]},
+  {id:"134858955", name:"心臓を射抜いて", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/c40173dac21c00a15cbc36d4dcadc668.jpg", tags:["heart","dark"]},
+  {id:"136795982", name:"空飛ぶラジオ", price:"8,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/07ffe473811f5c467921dd035ed9c7e0.jpg", tags:["space","music","art"]},
+  {id:"138601586", name:"地球", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/f583813e5de6528a46ce3aada3aae2bb.jpg", tags:["space","nature","simple"]},
+  {id:"138554785", name:"人生に音楽を", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/20cf93311432b693a8f811480f3fc550.jpg", tags:["music","simple","art"]},
+  {id:"135663309", name:"AM5:00", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/b0ca9e028a57adb9f901e807f6c15b23.jpg", tags:["simple","art","music"]},
+  {id:"138947375", name:"葱骨", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/bcf769464958a416d4d96b1c22a5d15f.jpg", tags:["food","pop","monster"]},
+  {id:"137885344", name:"＄の使い方", price:"5,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/aa0c9dd1af1d16d7b495d990430d25e8.jpg", tags:["art","urban","tech"]},
+  {id:"138554546", name:"Hastur", price:"8,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/190c39f9211ed0f13ce17189256028af.jpg", tags:["mystery","dark","monster"]},
+  {id:"134100823", name:"麦酒におぼれる", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/63879007bc0cd04be645560375e4bb10.jpg", tags:["food","dark","art"]},
+  {id:"137074126", name:"樽酒に溺れる", price:"4,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/e480f23b90efe87f53ba62099eaa0760.jpg", tags:["food","dark","art"]},
+  {id:"135348674", name:"三体問題の崩壊", price:"7,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/3be996dfde0ac036abb2155476a9bd35.jpg", tags:["tech","space","dark"]},
+  {id:"135663135", name:"地下道", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/82d33e747422c59a7ec33fae3ca5bc54.jpg", tags:["urban","dark","art"]},
+  {id:"135663137", name:"エスカレーター", price:"6,000", img:"https://baseec-img-mng.akamaized.net/images/item/origin/740d241424d7ed8b76ad5adb476bdffb.jpg", tags:["urban","simple"]},
+  {id:"140105507", name:"MIX.VOL.1", price:"6,500", img:"https://baseec-img-mng.akamaized.net/images/item/origin/796f914098be41629234cf5912266761.jpg", tags:["music","art","simple"]}
+];
+
+// ============ Questions ============
+const questions = [
+  {
+    q: "どんな雰囲気の服に惹かれる？",
+    options: [
+      { label: "ミステリアスでダークな世界観", tags: ["mystery","dark","monster"] },
+      { label: "ポップでカラフル、ユーモアのあるもの", tags: ["pop","food"] },
+      { label: "クールでスタイリッシュ、無駄のないもの", tags: ["simple","urban","tech"] },
+      { label: "アーティスティックで個性的なもの", tags: ["art","mystery"] }
+    ]
+  },
+  {
+    q: "普段の自分はどんなタイプ？",
+    options: [
+      { label: "静かに自分の世界に浸るタイプ", tags: ["mystery","art"] },
+      { label: "にぎやかでお喋りが大好き", tags: ["pop","food"] },
+      { label: "知的に物事を分析するタイプ", tags: ["tech","space"] },
+      { label: "感性で動くアーティストタイプ", tags: ["art","nature","music"] }
+    ]
+  },
+  {
+    q: "どんな場面でこの服を着たい？",
+    options: [
+      { label: "普段の街歩き・カフェ", tags: ["simple","urban"] },
+      { label: "フェスやライブ、人の集まる場", tags: ["pop","music"] },
+      { label: "友達とのご飯・お酒の席", tags: ["food","pop"] },
+      { label: "ひとりで好きな場所へ", tags: ["mystery","art","nature"] }
+    ]
+  },
+  {
+    q: "心惹かれるモチーフは？",
+    options: [
+      { label: "神話・怪奇生物・闇の世界", tags: ["mystery","monster","dark"] },
+      { label: "食べ物・お酒・グルメ", tags: ["food"] },
+      { label: "宇宙・サイエンス・コード", tags: ["space","tech"] },
+      { label: "街・夜景・音楽", tags: ["urban","music"] },
+      { label: "自然・海・動物", tags: ["nature"] },
+      { label: "ハート・愛・感情", tags: ["heart"] }
+    ]
+  },
+  {
+    q: "好きな色味は？",
+    options: [
+      { label: "モノクロ・モノトーン", tags: ["simple","mystery"] },
+      { label: "ビビッド・ネオンカラー", tags: ["pop","tech"] },
+      { label: "ダーク・くすみカラー", tags: ["dark","mystery"] },
+      { label: "ナチュラル・パステル", tags: ["nature","food"] }
+    ]
+  },
+  {
+    q: "一番好きな時間帯は？",
+    options: [
+      { label: "早朝（AM5:00）", tags: ["space","simple","music"] },
+      { label: "真昼", tags: ["food","pop","nature"] },
+      { label: "夕方", tags: ["urban","art"] },
+      { label: "深夜", tags: ["mystery","dark","music"] }
+    ]
+  },
+  {
+    q: "理想の休日の過ごし方は？",
+    options: [
+      { label: "本や映画に没頭する", tags: ["mystery","art"] },
+      { label: "美味しいものを食べに出かける", tags: ["food"] },
+      { label: "音楽を聴いたり何かを作ったり", tags: ["music","tech","art"] },
+      { label: "街や自然をぶらぶら散歩", tags: ["urban","nature"] }
+    ]
+  }
+];
+
+// ============ Type Definitions ============
+const types = {
+  mystery: { name: "MYSTIC EXPLORER", desc: "神話と闇の世界に惹かれる、深く静かなあなた。" },
+  dark:    { name: "MYSTIC EXPLORER", desc: "ダークで神秘的な美しさに惹かれる、内省的なあなた。" },
+  monster: { name: "MYTHOS WANDERER", desc: "怪奇と幻想の世界を愛する、独自の感性を持つあなた。" },
+  food:    { name: "GOURMET LOVER", desc: "美味しいものと楽しい時間を愛する、人生を満喫するタイプ。" },
+  pop:     { name: "POP ICON", desc: "明るくユーモアたっぷり。周りを楽しい気分にさせる存在。" },
+  tech:    { name: "DIGITAL THINKER", desc: "理性的でクール。技術と論理の美しさを知っているあなた。" },
+  space:   { name: "COSMIC DREAMER", desc: "宇宙の広がりに想いを馳せる、夢見がちで知的な人。" },
+  urban:   { name: "CITY DRIFTER", desc: "都市の空気が似合う、洗練されたミニマリスト。" },
+  nature:  { name: "NATURE SOUL", desc: "自然と海に心惹かれる、穏やかで感性豊かなあなた。" },
+  heart:   { name: "HEART ROMANTIC", desc: "感情と愛を大切にする、ロマンチストなあなた。" },
+  music:   { name: "RHYTHM SEEKER", desc: "音楽が日常にある、リズムと共に生きるタイプ。" },
+  art:     { name: "ART INDIVIDUALIST", desc: "個性とアートを愛する、自分のスタイルを持つ人。" },
+  simple:  { name: "MINIMAL PURIST", desc: "シンプルの中にある美しさを知る、洗練された感性。" }
+};
+
+// ============ App Logic ============
+const app = document.getElementById('app');
+let currentQ = 0;
+const answers = [];
+
+function startScreen() {
+  app.innerHTML = `
+    <div class="start-screen">
+      <p class="lead">あなたにぴったりの一枚を見つけます。</p>
+      <p>7つの質問に答えるだけで、<br>Ken'drickの54デザインの中から<br>あなたに似合う3着をおすすめします。</p>
+      <button class="btn" id="startBtn">START</button>
+    </div>
+  `;
+  document.getElementById('startBtn').addEventListener('click', () => {
+    currentQ = 0;
+    answers.length = 0;
+    renderQuestion();
+  });
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const progress = ((currentQ) / questions.length) * 100;
+  app.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>QUESTION ${currentQ + 1} / ${questions.length}</span>
+        <span>${Math.round(progress)}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+    </div>
+    <div class="question">
+      <span class="q-num">Q${String(currentQ + 1).padStart(2,'0')}</span>
+      <h2>${q.q}</h2>
+      <div class="options">
+        ${q.options.map((opt, i) => `<button class="option" data-i="${i}">${opt.label}</button>`).join('')}
+      </div>
+      <div class="nav-actions">
+        <button class="back-btn" id="backBtn" ${currentQ === 0 ? 'disabled' : ''}>← BACK</button>
+        <span style="font-size:11px;letter-spacing:0.2em;color:var(--sub);">SELECT ONE</span>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.i);
+      answers[currentQ] = q.options[i].tags;
+      currentQ++;
+      if (currentQ >= questions.length) {
+        renderResult();
+      } else {
+        renderQuestion();
+      }
+    });
+  });
+  document.getElementById('backBtn').addEventListener('click', () => {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQuestion();
+    }
+  });
+}
+
+function renderResult() {
+  // Tally tag scores
+  const tagScores = {};
+  answers.forEach(tags => {
+    tags.forEach(t => { tagScores[t] = (tagScores[t] || 0) + 1; });
+  });
+
+  // Score each product based on tag overlap
+  const scoredProducts = products.map(p => {
+    let score = 0;
+    p.tags.forEach(t => { if (tagScores[t]) score += tagScores[t]; });
+    return { ...p, score };
+  });
+  scoredProducts.sort((a, b) => b.score - a.score);
+
+  // Pick top 3 (with some shuffle among ties)
+  const top = scoredProducts.slice(0, 3);
+
+  // Determine user type from highest scoring tag
+  const topTag = Object.keys(tagScores).sort((a,b) => tagScores[b] - tagScores[a])[0];
+  const type = types[topTag] || types.simple;
+
+  // Progress to 100%
+  app.innerHTML = `
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>RESULT</span>
+        <span>100%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+    </div>
+    <div class="result">
+      <div class="result-intro">
+        <div class="label">YOUR TYPE</div>
+        <h2>あなたは</h2>
+        <div class="type-name">${type.name}</div>
+        <p>${type.desc}</p>
+        <p style="margin-top:24px;">この感性に響く3着を選びました。</p>
+      </div>
+      <div class="product-grid">
+        ${top.map((p, i) => `
+          <a class="product-card" href="https://kendrick.base.shop/items/${p.id}" target="_blank" rel="noopener">
+            <img class="product-img" src="${p.img}" alt="${p.name}" loading="lazy">
+            <div class="product-info">
+              <div class="product-rank">PICK ${String(i + 1).padStart(2,'0')}</div>
+              <div class="product-name">${p.name}</div>
+              <div class="product-price">¥${p.price}</div>
+            </div>
+          </a>
+        `).join('')}
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-outline" id="retryBtn">もう一度診断する</button>
+        <a class="shop-link" href="https://kendrick.base.shop/" target="_blank" rel="noopener">VISIT KEN'DRICK SHOP →</a>
+      </div>
+    </div>
+  `;
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    startScreen();
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Initial render
+startScreen();
+</script>
+</body>
+</html>

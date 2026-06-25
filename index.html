@@ -131,6 +131,25 @@
     min-height:2.2em;
   }
   .options{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line);}
+  .quiz-footer{
+    margin-top:18px;
+    display:flex;
+    justify-content:flex-start;
+  }
+  .back-btn{
+    background:transparent;
+    border:none;
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    padding:8px 4px;
+    cursor:pointer;
+    transition:color .25s;
+  }
+  .back-btn:hover, .back-btn:focus-visible{color:var(--text);}
+  .back-btn:disabled{opacity:0; pointer-events:none;}
+  .back-btn:focus-visible{outline:1px solid var(--accent); outline-offset:2px;}
   .option{
     text-align:left;
     background:transparent;
@@ -172,16 +191,23 @@
   .rec-label{font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--text-dim); margin:0 0 14px; border-top:1px solid var(--line); padding-top:28px;}
   .rec-list{display:flex; flex-direction:column; gap:1px; margin-bottom:40px;}
   .rec-item{
-    display:flex; justify-content:space-between; align-items:center; gap:14px;
+    display:flex; align-items:center; gap:14px;
     border-bottom:1px solid var(--line);
     padding:18px 0;
     text-decoration:none;
-    transition:padding-left .25s;
+    transition:padding-left .25s, background .25s;
   }
-  .rec-item:hover, .rec-item:focus-visible{padding-left:8px;}
-  .rec-main{display:flex; flex-direction:column; gap:6px;}
-  .rec-name{font-family:var(--serif); font-size:16px;}
-  .rec-desc{font-size:12px; color:var(--text-muted); line-height:1.6; max-width:300px;}
+  .rec-item:hover, .rec-item:focus-visible{padding-left:8px; background:rgba(255,255,255,0.02);}
+  .rec-img{
+    width:72px; height:72px;
+    flex-shrink:0;
+    object-fit:cover;
+    background:var(--bg-1);
+    border:1px solid var(--line);
+  }
+  .rec-main{display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;}
+  .rec-name{font-family:var(--serif); font-size:15px; line-height:1.4;}
+  .rec-desc{font-size:11px; color:var(--text-muted); line-height:1.6; max-width:260px;}
   .rec-side{display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;}
   .rec-price{font-family:var(--mono); font-size:13px; color:var(--text);}
   .rec-go{font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:.1em;}
@@ -241,6 +267,9 @@
     <p class="eyebrow" id="depthLabel">DEPTH 01/07</p>
     <h2 class="question" id="questionText"></h2>
     <div class="options" id="optionsList"></div>
+    <div class="quiz-footer">
+      <button class="back-btn" id="backBtn" type="button" aria-label="ひとつ前の質問に戻る">← ひとつ前に戻る</button>
+    </div>
   </section>
 
   <!-- RESULT -->
@@ -287,48 +316,48 @@ const TYPES = {
     name: '深淵', en: 'THE ABYSS',
     desc: '海より深く、宇宙より遠い場所に、あなたの感覚はすでに触れている。落ち着いて見えるのは、もう怖がるものがないからだ。',
     items: [
-      { name: 'Yog-Sothoth', price: '¥4,000', desc: '虹色の球体の集積をイメージ。', url: 'https://kendrick.base.shop/items/133074115' },
-      { name: 'Shoggoth', price: '¥7,000', desc: '着回しやすいスウェット・パーカー。', url: 'https://kendrick.base.shop/items/134100680' }
+      { name: 'Yog-Sothoth ヨグ＝ソトース', price: '¥4,000', desc: 'クトゥルフ神話 アートTシャツ ブラック', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/9ad3485d7a45f0f23b49c9bee1c76c98.jpg', url: 'https://kendrick.base.shop/items/133074116' },
+      { name: 'Shoggoth ショゴス', price: '¥7,000', desc: 'クトゥルフ神話 グラフィック スウェットパーカー グレー', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/1d00d1b5357371676389611fd564e4fa.jpg', url: 'https://kendrick.base.shop/items/134100680' }
     ]
   },
   B: {
     name: '論理', en: 'THE LOGIC',
     desc: 'あなたは世界を、実行可能な手順として見ている。曖昧さは、まだ最適化されていないだけのことだ。',
     items: [
-      { name: '★を手に入れる', price: '¥5,000', desc: '記号とプログラミングをモチーフにしたシリーズ。', url: 'https://kendrick.base.shop/items/133615921' },
-      { name: '♥を実行する', price: '¥5,000', desc: '記号とプログラミングをモチーフにしたシリーズ。', url: 'https://kendrick.base.shop/items/133073633' }
+      { name: '★を手に入れる', price: '¥5,000', desc: 'プログラミング 記号 アート 半袖Tシャツ 青', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/c0342e3acdbf468b0d7f9c728086b46c.jpg', url: 'https://kendrick.base.shop/items/133615921' },
+      { name: '♥を実行する', price: '¥5,000', desc: '記号とプログラミングをモチーフにしたシリーズ', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/5c97f77569e26afc61fced5aa5fb2bcd.jpg', url: 'https://kendrick.base.shop/items/133073633' }
     ]
   },
   C: {
     name: '違和感', en: 'THE UNCANNY',
     desc: '誰も気づいていない記号に、あなただけが気づいている。それは偶然ではない。',
     items: [
-      { name: '三角形と目', price: '¥4,000', desc: '朝起きると壁にこのマークが書いてあった。', url: 'https://kendrick.base.shop/items/133071560' },
-      { name: '魚', price: '¥3,000', desc: 'ブランド名をアレンジした魚のような記号を刺繍。', url: 'https://kendrick.base.shop/items/135662153' }
+      { name: '三角形と目', price: '¥4,000', desc: '目 三角形 アート 個性的 グラフィックTシャツ', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/51bdf5e3d748cf36c787fcb4183e7b63.jpg', url: 'https://kendrick.base.shop/items/133071560' },
+      { name: '魚', price: '¥3,000', desc: 'ロゴ刺繍 ワンポイント ミニマル 靴下', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/4e0662461460fc88615956b4b05924a9.jpg', url: 'https://kendrick.base.shop/items/135662153' }
     ]
   },
   D: {
     name: '裂け目', en: 'EVERYDAY RIFT',
     desc: 'いつもの食卓に、少しだけ説明のつかないものが混ざっている。あなたはそれに気づいて、なお楽しんでいる。',
     items: [
-      { name: 'メロンとワイン', price: '¥7,000', desc: 'メロンとワインを描いた長袖シャツ。', url: 'https://kendrick.base.shop/items/133964294' },
-      { name: '檸檬の日々', price: '¥6,000', desc: 'レモンと1週間をモチーフにしたイラスト。', url: 'https://kendrick.base.shop/items/135348731' }
+      { name: 'メロンとワイン', price: '¥7,000', desc: '静物 シュール アート 長袖Tシャツ ロンT グレー', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/5df5d06a7243e5019f20ee3ce4325d9f.jpg', url: 'https://kendrick.base.shop/items/133964294' },
+      { name: '檸檬の日々', price: '¥6,000', desc: 'レモン 日常 アート グラフィックTシャツ', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/860213b3562d10b0e54d913325215247.jpg', url: 'https://kendrick.base.shop/items/135348731' }
     ]
   },
   E: {
     name: '核', en: 'THE CORE',
     desc: '私は私である。それ以上の証明を、あなたは必要としない。',
     items: [
-      { name: "I'm I", price: '¥4,000', desc: '私は私である。', url: 'https://kendrick.base.shop/items/134061430' },
-      { name: '波と雲', price: '¥7,000', desc: '下に空、上に波。上下逆の構造。', url: 'https://kendrick.base.shop/items/137038874' }
+      { name: "I'm I", price: '¥4,000', desc: '私は私である。', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/54b953bf215b4f1e4971d0ab7484eb6a.jpg', url: 'https://kendrick.base.shop/items/135619920' },
+      { name: '波と雲', price: '¥7,000', desc: '空 波 反転 アート グラフィックTシャツ オレンジ', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/051e64fe39620a1c7e184dc50bfb3fee.jpg', url: 'https://kendrick.base.shop/items/137038874' }
     ]
   },
   F: {
     name: '鍵', en: 'THE ICON',
     desc: 'あなたが選ぶのは、説明の要らない定番。鍵を持つ者だけが、その先へ進める。',
     items: [
-      { name: '鍵', price: '¥7,000', desc: 'ブランド名と鍵をイメージ。', url: 'https://kendrick.base.shop/items/137008634' },
-      { name: 'バケットハット', price: '¥4,000', desc: 'ブランド名を刺繍したバケットハット。', url: 'https://kendrick.base.shop/items/133121076' }
+      { name: '鍵', price: '¥7,000', desc: 'ロゴ ミニマル 記号 グラフィック 長袖Tシャツ（ロングスリーブ）白', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/ee242b3801af373cc5ced387f294bac6.jpg', url: 'https://kendrick.base.shop/items/137008634' },
+      { name: 'バケットハット', price: '¥4,000', desc: 'ロゴ刺繍 帽子 メンズ レディース ブラック', img: 'https://baseec-img-mng.akamaized.net/images/item/origin/474904bc9c30d648485781493cabb620.jpg', url: 'https://kendrick.base.shop/items/133121076' }
     ]
   }
 };
@@ -375,6 +404,7 @@ const QUESTIONS = [
 const TYPE_ORDER = ['A','B','C','D','E','F'];
 let currentQ = 0;
 const scores = { A:0, B:0, C:0, D:0, E:0, F:0 };
+const answerHistory = []; // ユーザーが各問で選んだタイプを保持。戻るときにscoresから引くために使う。
 
 const screens = {
   intro: document.getElementById('screen-intro'),
@@ -405,10 +435,23 @@ function renderQuestion(){
     btn.addEventListener('click', () => selectAnswer(type));
     list.appendChild(btn);
   });
+
+  // 「ひとつ前に戻る」ボタンは最初の質問では非表示
+  const backBtn = document.getElementById('backBtn');
+  backBtn.disabled = currentQ === 0;
+}
+
+function goBack(){
+  if (currentQ === 0) return;
+  currentQ -= 1;
+  const lastType = answerHistory.pop();
+  if (lastType && scores[lastType] > 0) scores[lastType] -= 1;
+  renderQuestion();
 }
 
 function selectAnswer(type){
   scores[type] += 1;
+  answerHistory.push(type);
   currentQ += 1;
   if (currentQ >= QUESTIONS.length){
     showResult();
@@ -442,6 +485,7 @@ function showResult(){
     a.target = '_blank';
     a.rel = 'noopener';
     a.innerHTML = `
+      <img class="rec-img" src="${item.img}" alt="${item.name}" loading="lazy">
       <div class="rec-main">
         <span class="rec-name">${item.name}</span>
         <span class="rec-desc">${item.desc}</span>
@@ -465,6 +509,7 @@ function showResult(){
 function resetQuiz(){
   currentQ = 0;
   TYPE_ORDER.forEach(t => scores[t] = 0);
+  answerHistory.length = 0;
   depthOverlay.style.opacity = 0;
   showScreen('intro');
 }
@@ -473,6 +518,7 @@ document.getElementById('startBtn').addEventListener('click', () => {
   renderQuestion();
   showScreen('quiz');
 });
+document.getElementById('backBtn').addEventListener('click', goBack);
 document.getElementById('retryBtn').addEventListener('click', resetQuiz);
 </script>
 </body>
